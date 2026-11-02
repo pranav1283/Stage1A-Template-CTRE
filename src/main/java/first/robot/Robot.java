@@ -19,6 +19,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import first.robot.simulation.DrivetrainSim;
+import first.robot.simulation.FuelSim;
+import first.robot.simulation.SingleFlywheelSim;
 
 /**
  * The methods in this class are called automatically as described in the OpModeRobot documentation.
@@ -39,6 +41,10 @@ public class Robot extends OpModeRobot {
   private final DrivetrainSim drivetrainSim = new DrivetrainSim(leftLeader, rightLeader);
 
   public final TalonFX intakeLauncher = new TalonFX(4, new CANBus(CANPort.CAN_S0));
+  public final TalonFX feeder = new TalonFX(5, new CANBus(CANPort.CAN_S0));
+
+  private final SingleFlywheelSim intakeLauncherSim = SingleFlywheelSim.forIntakeLauncher(intakeLauncher);
+  private final SingleFlywheelSim feederSim = SingleFlywheelSim.forFeeder(feeder);
 
   
 
@@ -66,5 +72,8 @@ public class Robot extends OpModeRobot {
   @Override
   public void simulationPeriodic() {
     drivetrainSim.periodic();
+    intakeLauncherSim.periodic();
+    feederSim.periodic();
+    FuelSim.periodic();
   }
 }

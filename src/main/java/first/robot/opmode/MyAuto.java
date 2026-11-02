@@ -8,9 +8,11 @@ package first.robot.opmode;
 import first.robot.Robot;
 import org.wpilib.opmode.Autonomous;
 import org.wpilib.opmode.PeriodicOpMode;
+import org.wpilib.system.Timer;
 
 @Autonomous(name = "My Auto", group = "Group 1")
 public class MyAuto extends PeriodicOpMode {
+  private final Timer timer = new Timer();
   private final Robot robot;
 
   /** The Robot instance is passed into the opmode via the constructor. */
@@ -21,6 +23,7 @@ public class MyAuto extends PeriodicOpMode {
   @Override
   public void start() {
     /* Called once when the robot is enabled. */
+    timer.restart();
   }
 
   /*
@@ -30,5 +33,11 @@ public class MyAuto extends PeriodicOpMode {
    * which can have periods that differ from the main Robot instance.
    */
   @Override
-  public void periodic() {}
+  public void periodic() {
+    if (timer.hasElapsed(4.0)) {
+      robot.drivetrain.arcadeDrive(0, 0);
+    } else {
+      robot.drivetrain.arcadeDrive(0.5, 0);
+    }
+  }
 }
